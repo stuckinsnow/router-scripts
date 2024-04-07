@@ -1,0 +1,23 @@
+nano /jffs/scripts/woldcmd.sh
+
+#!/bin/sh
+
+sleep 10
+logger "PC powered on!"
+/usr/sbin/ether-wake -i br0 -b MACADDRESS
+exit 0
+
+chmod +x /jffs/scripts/wolcmd.sh
+
+# For raspberrypi
+
+apt-get install etherwake
+nano /scripts/wolcmd.sh
+
+#!/bin/sh
+
+sudo /usr/sbin/etherwake -i eth0 -b MACADDRESS
+echo 'PC boot initiated'
+exit 0
+
+chmod +x wolcmd.sh
