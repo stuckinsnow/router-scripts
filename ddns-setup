@@ -1,0 +1,31 @@
+nano /jffs/scripts/ddns-start
+
+#!/bin/sh
+sleep 10
+# Update variables
+HOSTS="hostname"
+#HOSTS="hostname1 hostname2"
+DOMAIN=domain.com
+PASSWORD=XXXXXXXXXXXXXXXXXXXXXXXX
+
+# Should be no need to modify anything beyond this point
+IP=$1
+STATUS=0
+for HOSTNAME in $HOSTS; do
+  /usr/sbin/wget --no-check-certificate -qO - "https://dynamicdns.park-your-domain.com/update?host=$HOSTNAME&domain=$DOMAIN&password=$PASSWORD&ip=$IP"
+  if [ $? -ne 0 ]; then
+    STATUS=1
+  fi
+done
+if [ $STATUS -eq 0 ]; then
+  /sbin/ddns_custom_updated 1
+else
+  /sbin/ddns_custom_updated 0
+fi
+
+chmod +x /jffs/scripts/ddns-start
+cd /jffs/.le
+service restart_letsencrypt
+
+
+in 192.168.12.1 (default 192.168.1.1 upon reset) set persistent jffs2 partition to enable jffs custom scripts and configs
